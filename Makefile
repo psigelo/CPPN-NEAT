@@ -3,24 +3,23 @@ VPATH = ./src ./headers ./objects
 CC = g++ -O3
 CFLAGS = -g -Wall -I./headers -I./objects -I./src
 
-test_genetic_encoding: genetic_encoding.o test_genetic_encoding.cpp 
-	@$(CC) $(CFLAGS)  ./src/test_genetic_encoding.cpp ./objects/genetic_encoding.o  -o ./executables/$@
+CPPN-NEAT: run_CPPN-NEAT.cpp CPPN-NEAT.o  genetic_encoding.o fitness.o 
+	@$(CC) $(CFLAGS) ./objects/function.o ./src/run_CPPN-NEAT.cpp ./objects/CPPN-NEAT.o ./objects/genetic_encoding.o ./objects/fitness.o -o ./executables/CPPN-NEAT
 
-test_NEAT: test_NEAT.cpp NEAT.o  genetic_encoding.o fitness.o 
-	@$(CC) $(CFLAGS) ./src/test_NEAT.cpp ./objects/NEAT.o ./objects/genetic_encoding.o ./objects/fitness.o -o ./executables/NEAT_test
-
-NEAT.o: NEAT.cpp
-	@$(CC) $(CFLAGS) -c ./src/NEAT.cpp  -o ./objects/NEAT.o
+CPPN-NEAT.o: CPPN-NEAT.cpp
+	@$(CC) $(CFLAGS) -c ./src/CPPN-NEAT.cpp  -o ./objects/CPPN-NEAT.o
 
 example1.o: example1.cpp example1.hpp 
 	@$(CC) $(CFLAGS) -c example1.cpp -o ./objects/example1.o	
 
-genetic_encoding.o: genetic_encoding.cpp 
-	@$(CC) $(CFLAGS) -c $^ -o ./objects/genetic_encoding.o
+genetic_encoding.o: genetic_encoding.cpp function.o
+	@$(CC) $(CFLAGS) -c ./src/genetic_encoding.cpp -o ./objects/genetic_encoding.o
 
 fitness.o: fitness.cpp 
 	@$(CC) $(CFLAGS) -c ./src/fitness.cpp  -o ./objects/fitness.o
 
+function.o: function.cpp 
+	@$(CC) $(CFLAGS) -c ./src/function.cpp  -o ./objects/function.o
 
 clean:
 	@rm -f ./objects/*.o ./executables/*
